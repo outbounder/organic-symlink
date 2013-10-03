@@ -20,16 +20,18 @@ module.exports = Organel.extend(function Symlink(plasma, config){
     for(var key in c.target) {
       for(var dirName in c.target[key]) {
         var dest = path.join(process.cwd(),key,dirName);
-        if(fs.existsSync(dest)) return next && next() // TODO existsSync for invalid links returns false
+        if(fs.existsSync(dest)) continue // TODO existsSync for invalid links returns false
         fs.symlinkSync(path.join(process.cwd(),c.target[key][dirName]), dest);
       }
     }
+    next && next()
   },
   unsymlink: function(c, next) {
     for(var key in c.target) {
       for(var dirName in c.target[key]) {
-        fs.unlinkSync(path.join(process.cwd(),key,dirName), next || console.log);
+        fs.unlinkSync(path.join(process.cwd(),key,dirName), console.log);
       }
     }
+    next && next()
   }
 })
